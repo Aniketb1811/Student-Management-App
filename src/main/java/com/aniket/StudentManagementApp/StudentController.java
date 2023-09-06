@@ -1,70 +1,62 @@
 package com.aniket.StudentManagementApp;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController
+@RequestMapping("/student")
 public class StudentController {
-    Map<Integer, Student> db = new HashMap<>();
+
+    @Autowired
+    StudentService studentService;
 
     @PostMapping("/add")
     public String addStudent(@RequestBody Student student){
-        db.put(student.getRegNo(), student);
-        return "Student has been added successfully";
+        return studentService.addStudent(student);
     }
 
     @GetMapping("/get")
     public Student getStudent(@RequestParam("q") int regNo){
-        return db.get(regNo);
+        return studentService.getStudent(regNo);
     }
 
     @GetMapping("/getByPath/{id}")
     public Student getStudentUsingPath(@PathVariable("id") int regNo){
-        return db.get(regNo);
+        return studentService.getStudent(regNo);
     }
 
-    @PutMapping("/update-age")
+    @PutMapping("/updateAge")
     public Student updateAge(@RequestParam("id") int regNo, @RequestParam("age") int age){
-        db.get(regNo).setAge(age);
-        return db.get(regNo);
+        return studentService.updateAge(regNo, age);
     }
 
     @DeleteMapping("/delete")
     public String deleteStudent(@RequestParam("id") int regNo){
-        db.remove(regNo);
-        return "Student has been deleted successfully";
+        return studentService.deleteStudent(regNo);
     }
 
     @DeleteMapping("/delete/{id}")
     public String deleteStudentUsingPath(@PathVariable("id") int regNo){
-        db.remove(regNo);
-        return "Student has been deleted successfully";
+        return studentService.deleteStudent(regNo);
     }
 
     @PutMapping("/updateCourse")
     public Student updateCourse(@RequestParam("id") int regNo, @RequestParam("course") String course){
-        db.get(regNo).setCourse(course);
-        return db.get(regNo);
+        return studentService.updateCourse(regNo, course);
     }
 
     @PutMapping("/updateCourse/{id}/{course}")
     public Student updateCourseUsingPath(@PathVariable("id") int regNo, @PathVariable("course") String course){
-        db.get(regNo).setCourse(course);
-        return db.get(regNo);
+        return studentService.updateCourse(regNo, course);
     }
 
     @PutMapping("/updateCourse/{course}")
     public Student updateCourseUsingBoth(@RequestParam("id")int regNo, @PathVariable("course") String course){
-        db.get(regNo).setCourse(course);
-        return db.get(regNo);
+        return studentService.updateCourse(regNo, course);
     }
 
     @PutMapping("/updateCourseAge")
     public Student updateCourseAge(@RequestParam("id") int regNo, @RequestBody Student student){
-        db.get(regNo).setCourse(student.getCourse());
-        db.get(regNo).setAge(student.getAge());
-        return db.get(regNo);
+        return studentService.updateCourseAge(regNo, student);
     }
 }
